@@ -1,1 +1,24 @@
 
+name: Update patch-android.js
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check workflow files
+        run: |
+          echo "Checking SpeakWise project files"
+          test -f package.json
+          test -f capacitor.config.json
+          test -f scripts/patch-android.js
+          test -f www/index.html
+          echo "All required files are present."
