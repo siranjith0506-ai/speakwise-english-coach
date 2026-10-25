@@ -1,0 +1,17 @@
+{
+  "name": "SpeakWise English Coach",
+  "short_name": "SpeakWise",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fbfbfe",
+  "theme_color": "#111827",
+  "description": "Your personal English speaking and writing coach",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

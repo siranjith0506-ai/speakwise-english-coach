@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <meta name="description" content="Your personal English speaking and writing coach">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <title>SpeakWise — English Coach</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-mark">S<span>✦</span></div>
+      <div class="brand-copy"><strong>SpeakWise</strong><small>YOUR PERSONAL ENGLISH COACH</small></div>
+      <button id="installBtn" class="icon-btn" aria-label="Install app" hidden>＋</button>
+    </header>
+
+    <main>
+      <section id="homeView">
+        <div class="welcome">
+          <p class="eyebrow">YOUR DAILY PRACTICE</p>
+          <h1>Speak with<br><span>confidence.</span></h1>
+          <p class="muted">Practise speaking, polish messages and write professional emails.</p>
+        </div>
+        <div class="streak-card">
+          <div><span class="streak-icon">✦</span><div><strong id="minutesToday">0 min</strong><small>Practice today</small></div></div>
+          <div class="streak-divider"></div>
+          <div><strong id="sessionCount">0</strong><small>Sessions</small></div>
+          <div class="streak-divider"></div>
+          <div><strong id="wordCount">0</strong><small>Words spoken</small></div>
+        </div>
+
+        <div class="section-heading"><div><p class="eyebrow">CHOOSE YOUR FOCUS</p><h2>What shall we practise?</h2></div></div>
+        <div class="scenario-grid">
+          <button class="scenario selected" data-scenario="daily"><span class="scenario-icon">☕</span><strong>Daily conversation</strong><small>Build speaking fluency</small></button>
+          <button class="scenario" data-scenario="work"><span class="scenario-icon">💼</span><strong>Office & meetings</strong><small>Sound professional</small></button>
+          <button class="scenario" data-scenario="presentation"><span class="scenario-icon">🎤</span><strong>Presentations</strong><small>Speak with clarity</small></button>
+          <button class="scenario" data-scenario="interview"><span class="scenario-icon">✨</span><strong>Interview practice</strong><small>Answer with confidence</small></button>
+        </div>
+
+        <div class="coach-tip"><span>✦</span><div><strong>Your coach's tip</strong><p>Don't worry about making mistakes. Speak in complete sentences, and learn from each correction.</p></div></div>
+        <button id="startBtn" class="primary-btn">Start speaking practice <span>→</span></button>
+        <button id="openCorrector" class="secondary-feature-btn"><span>✎</span><div><strong>Speak & Correct</strong><small>Dictate a message or email, polish it, then copy it into any chat box.</small></div><span class="feature-arrow">→</span></button>
+        <p class="privacy-note">Your practice history is saved on this device.</p>
+      </section>
+
+      <section id="practiceView" hidden>
+        <div class="practice-top">
+          <button id="backBtn" class="back-btn">← <span>Back</span></button>
+          <span class="live-pill"><i></i> PRACTICE SESSION</span>
+        </div>
+        <p class="eyebrow" id="scenarioLabel">DAILY CONVERSATION</p>
+        <h1 class="practice-title">Let's have a<br><span>conversation.</span></h1>
+        <p class="muted" id="scenarioPrompt">Tell me how your day is going.</p>
+        <div class="voice-orb-wrap">
+          <div class="voice-orb" id="voiceOrb"><div class="orb-core">✦</div></div>
+          <p id="voiceStatus" class="voice-status">Your coach is ready</p>
+          <small id="voiceHint">Tap the microphone and start speaking</small>
+        </div>
+        <div class="conversation-card">
+          <div class="message-label"><span class="coach-dot">✦</span> YOUR COACH</div>
+          <p id="coachMessage">Hi! I'm your English practice coach. Let's start with an easy question: how has your day been so far?</p>
+          <button id="replayBtn" class="text-btn">▶ Listen again</button>
+          <div class="message-separator"></div>
+          <div class="message-label">YOU SAID</div>
+          <p id="userMessage" class="user-placeholder">Your spoken words will appear here…</p>
+        </div>
+        <div id="feedbackCard" class="feedback-card" hidden>
+          <div class="feedback-head">✦ <strong>Speaking feedback</strong></div>
+          <div class="feedback-row"><small>YOUR SENTENCE</small><p id="originalText"></p></div>
+          <div class="feedback-row"><small>MORE NATURAL</small><p id="correctedText" class="corrected"></p></div>
+          <p id="feedbackNote" class="feedback-note"></p>
+        </div>
+        <div class="practice-controls">
+          <button id="micBtn" class="mic-btn"><span>🎙</span></button>
+          <p id="micLabel">Tap to speak</p>
+          <button id="endBtn" class="end-btn">Finish session</button>
+        </div>
+        <p class="disclaimer">MVP mode: speech recognition and sample coaching responses. Real AI feedback is a later integration.</p>
+      </section>
+
+      <section id="progressView" hidden>
+        <button class="back-btn" id="progressBack">← <span>Home</span></button>
+        <p class="eyebrow">YOUR JOURNEY</p><h1>Your progress.</h1>
+        <p class="muted">Every minute you practise is progress.</p>
+        <div class="progress-summary">
+          <div><strong id="progressMinutes">0</strong><small>Minutes</small></div>
+          <div><strong id="progressSessions">0</strong><small>Sessions</small></div>
+          <div><strong id="progressWords">0</strong><small>Words spoken</small></div>
+        </div>
+        <h2>Recent sessions</h2>
+        <div id="historyList" class="history-list"></div>
+        <button id="clearHistory" class="secondary-btn">Clear local history</button>
+      </section>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav-item active" id="homeNav"><span>⌂</span>Home</button>
+      <button class="nav-item" id="progressNav"><span>▥</span>Progress</button>
+    </nav>
+  </div>
+
+  <!-- Floating voice-to-text correction popup -->
+  <div id="correctorOverlay" class="modal-overlay" hidden>
+    <section class="corrector-modal" role="dialog" aria-modal="true" aria-labelledby="correctorTitle">
+      <div class="modal-grabber"></div>
+      <div class="modal-heading">
+        <div><p class="eyebrow">VOICE-TO-TEXT ASSISTANT</p><h2 id="correctorTitle">Speak & Correct</h2></div>
+        <button id="closeCorrector" class="close-modal" aria-label="Close">×</button>
+      </div>
+      <p class="modal-intro">Speak naturally. Turn your words into a polished message or professional email you can copy into WhatsApp, Gmail or any chat box.</p>
+
+      <div class="field-label">WHAT ARE YOU WRITING?</div>
+      <div class="mode-switch" id="writingModes">
+        <button class="mode-chip active" data-mode="message">Chat / WhatsApp</button>
+        <button class="mode-chip" data-mode="email">Professional email</button>
+        <button class="mode-chip" data-mode="formal">Formal message</button>
+      </div>
+
+      <div class="field-label">1. DICTATE OR TYPE YOUR DRAFT</div>
+      <textarea id="draftInput" rows="4" placeholder="Tap the microphone and say what you want to write… or type your draft here."></textarea>
+      <div class="dictation-actions">
+        <button id="dictateBtn" class="dictate-btn"><span>🎙</span> <span id="dictateLabel">Start dictation</span></button>
+        <button id="clearDraft" class="quiet-btn">Clear</button>
+      </div>
+      <p id="dictationStatus" class="tiny-status">Dictation uses your browser's speech recognition when supported.</p>
+
+      <div class="field-label output-label">2. POLISHED VERSION</div>
+      <textarea id="polishedOutput" rows="5" placeholder="Your corrected text will appear here…" readonly></textarea>
+      <div id="polishNote" class="polish-note">Choose a writing type, dictate or type your draft, then tap “Polish text”.</div>
+      <div class="output-actions">
+        <button id="polishBtn" class="primary-btn compact">Polish text <span>✦</span></button>
+        <button id="copyBtn" class="copy-btn">Copy text</button>
+      </div>
+      <p class="modal-footnote">Current MVP uses local formatting and common grammar fixes. Full AI rewriting will be added in the next phase. Always review important work emails before sending.</p>
+    </section>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

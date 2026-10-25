@@ -1,0 +1,6 @@
+{
+  "appId": "com.speakwise.englishcoach",
+  "appName": "SpeakWise",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
