@@ -1,10 +1,13 @@
+
 {
   "name": "speakwise-android",
   "version": "1.0.0",
   "private": true,
   "description": "SpeakWise English coach Android wrapper",
   "scripts": {
-    "build": "node -e \"console.log('Static SpeakWise app: no web compilation needed')\""
+    "build": "node -e \"console.log('Static SpeakWise app: no web compilation needed')\"",
+    "android:sync": "npx cap sync android",
+    "android:patch": "node scripts/patch-android.js"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.3",
