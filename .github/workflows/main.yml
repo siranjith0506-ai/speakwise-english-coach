@@ -1,5 +1,5 @@
 
-name: Update patch-android.js
+name: Build SpeakWise Android APK
 
 on:
   push:
@@ -7,18 +7,63 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  check:
+  build-android:
+    name: Build Android APK
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check workflow files
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Validate project files
         run: |
-          echo "Checking SpeakWise project files"
           test -f package.json
           test -f capacitor.config.json
           test -f scripts/patch-android.js
           test -f www/index.html
-          echo "All required files are present."
+          echo "SpeakWise source files verified."
+
+      - name: Generate Android project if needed
+        run: |
+          if [ ! -f android/gradlew ]; then
+            npx cap add android
+          fi
+
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      - name: Configure SpeakWise floating assistant
+        run: node scripts/patch-android.js
+
+      - name: Build debug APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: SpeakWise-Android-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
